@@ -14,6 +14,9 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('nuitrition_sheet').worksheet('ABBREV')
 names_col = SHEET.col_values(1)
 
+success = "SUCCESSFUL"
+fail = "FAIL"
+
 def get_casefolded_food_names():
     i = 0
     while i < 1:
@@ -22,3 +25,18 @@ def get_casefolded_food_names():
     return casefold_names
 
 casefold_names_converted = get_casefolded_food_names()
+
+def get_search_query():
+    query = input("Please enter text here\n").casefold()
+    result = list(filter(lambda x: x.startswith(query), casefold_names_converted))
+    return result
+
+search_results = get_search_query()
+
+# Create a loop that iterates through every item to get the corresponding row
+for q in range(len(search_results)):
+    result1 = SHEET.acell(search_results[q]).value
+
+
+# Create the search query object
+
