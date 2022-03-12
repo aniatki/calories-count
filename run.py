@@ -14,6 +14,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('nuitrition_sheet').worksheet('ABBREV')
 names_col = SHEET.col_values(1)
 
+
 def get_casefold_food_names():
     i = 0
     while i < 1:
@@ -21,15 +22,12 @@ def get_casefold_food_names():
         i += 1
     return casefold_names
 
-casefold_names_converted = get_casefold_food_names()
-
 
 def get_search_query():
     query = input("Please enter text here\n").casefold()
     result = list(filter(lambda x: x.startswith(query), casefold_names_converted))
     return result
 
-search_results = get_search_query()
 
 def get_row_index_from_search():    
     
@@ -48,3 +46,31 @@ def get_row_index_from_search():
                 ind_list.append(index)
     return ind_list
 
+
+def display_search_results():
+
+    if len(index_query_list) == 0:
+        print(f"Sorry, we didn't find anything for {search_results.query}!\nMaybe you'd like to try something else.\n\nHint: Try entering text.")
+    elif len(index_query_list) > 0:
+        print(f"We found {len(index_query_list)} results.")
+    return len(index_query_list)
+
+
+def create_data_from_row():
+    for ind in index_query_list:
+        name = SHEET.cell(ind, 1).value
+        energy = SHEET.cell(ind, 2).value
+        protein = SHEET.cell(ind, 3).value
+        fat = SHEET.cell(ind, 4).value
+        carbs = SHEET.cell(ind, 5).value
+        fibre = SHEET.cell(ind, 6).value
+        print(f"{name} contains {energy}kCal, {protein}g of protein, {fat}g of fat, and {fibre}g of fibre.")
+
+
+# Calling the functions
+
+casefold_names_converted = get_casefold_food_names()
+search_results = get_search_query()
+index_query_list = get_row_index_from_search()
+display_search_results()
+create_data_from_row()
