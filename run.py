@@ -50,21 +50,22 @@ def get_row_index_from_search():
 def display_search_results():
 
     if len(index_query_list) == 0:
-        print(f"Sorry, we didn't find anything for {search_results.query}!\nMaybe you'd like to try something else.\n\nHint: Try entering text.")
+        print(f"Sorry, we didn't find any results!\nHint: Try entering text.")
     elif len(index_query_list) > 0:
-        print(f"We found {len(index_query_list)} results.")
+        print(f"We found {len(index_query_list)} results.\n")
     return len(index_query_list)
 
 
 def create_data_from_row():
     for ind in index_query_list:
-        name = SHEET.cell(ind, 1).value
-        energy = SHEET.cell(ind, 2).value
-        protein = SHEET.cell(ind, 3).value
-        fat = SHEET.cell(ind, 4).value
-        carbs = SHEET.cell(ind, 5).value
-        fibre = SHEET.cell(ind, 6).value
-        print(f"{name} contains {energy}kCal, {protein}g of protein, {fat}g of fat, and {fibre}g of fibre.")
+        row = SHEET.row_values(ind)
+        name = row[0].capitalize()
+        energy = row[1]
+        protein = row[2]
+        fat = row[3]
+        carbs = row[4]
+        fiber = row[-1]
+        print(f"{name} contains {energy}kCal, {protein}g of protein, {fat}g of fat, and {fiber}g of fiber.")
 
 
 # Calling the functions
