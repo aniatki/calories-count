@@ -23,6 +23,7 @@ def get_casefold_food_names():
 
 casefold_names_converted = get_casefold_food_names()
 
+
 def get_search_query():
     query = input("Please enter text here\n").casefold()
     result = list(filter(lambda x: x.startswith(query), casefold_names_converted))
@@ -30,6 +31,20 @@ def get_search_query():
 
 search_results = get_search_query()
 
-for result in search_results:
-    cell = SHEET.find(result)
+def get_row_index_from_search():    
+    
+    # Loop through search results
+    ind_list = []
+    
+    for result in search_results:
+        
+        index = 0
+        
+        # Loop through the names column to find matches
+        for name in casefold_names_converted:
+            #Get row indices
+            index += 1 # Update the index for each match
+            if result.casefold() == name:
+                ind_list.append(index)
+    return ind_list
 
