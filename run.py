@@ -30,14 +30,10 @@ def get_search_query():
 
 
 def get_row_index_from_search():    
-    
-    # Loop through search results
     ind_list = []
-    
+    # Loop through search results
     for result in search_results:
-        
         index = 0
-        
         # Loop through the names column to find matches
         for name in casefold_names_converted:
             #Get row indices
