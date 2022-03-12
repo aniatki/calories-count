@@ -8,6 +8,4 @@ node_modules/
 .github/
 
 creds.json
-
 run2.py
-FoodEntry.py
