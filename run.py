@@ -1,6 +1,15 @@
 import gspread
 from google.oauth2.service_account import Credentials
 import time
+from termcolor import colored
+
+
+welcome_str_start = "Welcome to"
+foodWise = f"{colored('food', 'green')}{colored('Wise', 'blue')}."
+welcome_str_end = "Search for any food's nutritional values by typing its name below."
+
+print(welcome_str_start, foodWise, welcome_str_end)
+
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -17,6 +26,9 @@ sheet_values = SHEET.get_all_values()
 all_values_list = sheet_values
 
 
+global start 
+global end
+
 def get_names():
 
     """First column of worksheet"""
@@ -25,6 +37,9 @@ def get_names():
     for value in sheet_values:
         names.append(value[0])
     return names
+
+
+names_col = get_names()
 
 
 def get_casefold_food_names():
@@ -38,10 +53,15 @@ def get_casefold_food_names():
     return casefold_names
 
 
+casefold_names_converted = get_casefold_food_names()
+
+
 def get_search_query():
-    query = input("Please enter text here\n").casefold()
+    query = input("What would you like to search for?\nExample: bread\n").casefold()
     result = list(filter(lambda x: x.startswith(query), casefold_names_converted))
     return result
+
+s_query = get_search_query()
 
 
 def get_row_index_from_search():
@@ -50,7 +70,7 @@ def get_row_index_from_search():
     
     ind_list = []
     # Loop through search results
-    for result in search_criteria:
+    for result in s_query:
         index = 0
         # Loop through the names column to find matches
         for name in casefold_names_converted:
@@ -61,23 +81,29 @@ def get_row_index_from_search():
     return ind_list
 
 
+search_ind = get_row_index_from_search()
+
+start = time.time()
+
 def response_from_search():
     
     """Shows how many results are found, if any"""
 
-    if len(index_query_list) <= 0:
+    if len(search_ind) == 0:
         print(f"Sorry, we didn't find any results!\nHint: Try entering text.")
-        get_search_query()
+        # Need to run a search query after this
+    elif len(search_ind) > 0:
+        end = time.time()
+        print(f"{len(search_ind)} results found in {round(end - start, 1)} seconds.\n")
     else:
-        print(f"{len(index_query_list)} results found in {round(end - start, 1)} seconds.\n")
-    # return len(index_query_list)
+        main()
 
 
 def show_search_results():
 
     """Formats each individual search result to be readable"""
 
-    for ind in index_query_list:
+    for ind in search_ind:
         row = all_values_list[ind-1]
         name = row[0].capitalize()
         energy = row[1]
@@ -85,16 +111,12 @@ def show_search_results():
         fat = row[3]
         carbs = row[4]
         fiber = row[-1]
-        print(f"{name} contains {energy}kCal, {protein}g of protein, {fat}g of fat, and {fiber}g of fiber.")
+        print(f"{name} contains {energy}kCal, {protein}g of protein, {fat}g of fat, and {fiber}g of fiber.\n")
 
 
 # Calling the functions
 
-names_col = get_names()
-casefold_names_converted = get_casefold_food_names()
-search_criteria = get_search_query()
-start = time.time()
-index_query_list = get_row_index_from_search()
-end = time.time()
-response_from_search()
-show_search_results()
+def main():
+    response_from_search()
+    show_search_results()
+main()
