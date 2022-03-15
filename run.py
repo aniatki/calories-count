@@ -12,10 +12,24 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 
 SHEET = GSPREAD_CLIENT.open('nuitrition_sheet').worksheet('ABBREV')
-names_col = SHEET.col_values(1)
+sheet_values = SHEET.get_all_values()
+all_values_list = sheet_values
+
+
+def get_names():
+
+    """First column of worksheet"""
+
+    names = []
+    for value in sheet_values:
+        names.append(value[0])
+    return names
 
 
 def get_casefold_food_names():
+
+    """Converts all food names to ignore letter casing"""
+
     i = 0
     while i < 1:
         casefold_names = [x.casefold() for x in names_col]
@@ -29,7 +43,10 @@ def get_search_query():
     return result
 
 
-def get_row_index_from_search():    
+def get_row_index_from_search():
+    
+    """Finds the indices of all rows that contain the search query"""
+    
     ind_list = []
     # Loop through search results
     for result in search_results:
@@ -43,18 +60,24 @@ def get_row_index_from_search():
     return ind_list
 
 
-def display_search_results():
+def response_from_search():
+    
+    """Shows how many results are found, if any"""
 
-    if len(index_query_list) == 0:
+    if len(index_query_list) <= 0:
         print(f"Sorry, we didn't find any results!\nHint: Try entering text.")
-    elif len(index_query_list) > 0:
+        get_search_query()
+    else:
         print(f"We found {len(index_query_list)} results.\n")
-    return len(index_query_list)
+    # return len(index_query_list)
 
 
-def create_data_from_row():
+def show_search_results():
+
+    """Formats each individual search result to be readable"""
+
     for ind in index_query_list:
-        row = SHEET.row_values(ind)
+        row = all_values_list[ind-1]
         name = row[0].capitalize()
         energy = row[1]
         protein = row[2]
@@ -66,8 +89,9 @@ def create_data_from_row():
 
 # Calling the functions
 
+names_col = get_names()
 casefold_names_converted = get_casefold_food_names()
 search_results = get_search_query()
 index_query_list = get_row_index_from_search()
-display_search_results()
-create_data_from_row()
+response_from_search()
+show_search_results()
