@@ -5,8 +5,8 @@ from termcolor import colored
 
 
 welcome_str_start = "Welcome to"
-foodWise = f"{colored('food', 'green')}{colored('Wise', 'blue')}."
-welcome_str_end = "Search for any food's nutritional values by typing its name below."
+foodWise = f"{colored('food', 'green')}{colored('Wise', 'cyan')}."
+welcome_str_end = "Search for any food's nutritional values by typing its name below.\nPlease wait...\n"
 
 print(welcome_str_start, foodWise, welcome_str_end)
 
@@ -59,6 +59,7 @@ casefold_names_converted = get_casefold_food_names()
 def get_search_query():
     query = input("What would you like to search for?\nExample: bread\n").casefold()
     result = list(filter(lambda x: x.startswith(query), casefold_names_converted))
+    print("Processing", query,"...")
     return result
 
 s_query = get_search_query()
@@ -70,14 +71,14 @@ def get_row_index_from_search():
     
     ind_list = []
     # Loop through search results
-    for result in s_query:
+    for q in s_query:
         index = 0
         # Loop through the names column to find matches
         for name in casefold_names_converted:
             #Get row indices
-            index += 1 # Update the index for each match
-            if result.casefold() == name:
-                ind_list.append(index)
+            index += 1 # Update the index for each item
+            if q.casefold() == name:
+                ind_list.append(index) # Append the index to the list for each match
     return ind_list
 
 
@@ -88,15 +89,17 @@ start = time.time()
 def response_from_search():
     
     """Shows how many results are found, if any"""
-
-    if len(search_ind) == 0:
+    while len(search_ind) < 1:
         print(f"Sorry, we didn't find any results!\nHint: Try entering text.")
-        # Need to run a search query after this
-    elif len(search_ind) > 0:
+        get_search_query()
+    if len(search_ind) > 0:
         end = time.time()
-        print(f"{len(search_ind)} results found in {round(end - start, 1)} seconds.\n")
-    else:
-        main()
+        duration = round(end - start, 1)
+        if duration == 0:
+            print(f"{len(search_ind)} results found.\n")
+        else:
+            print(f"{len(search_ind)} results found in {duration} seconds.\n")
+            
 
 
 def show_search_results():
@@ -113,8 +116,6 @@ def show_search_results():
         fiber = row[-1]
         print(f"{name} contains {energy}kCal, {protein}g of protein, {fat}g of fat, and {fiber}g of fiber.\n")
 
-
-# Calling the functions
 
 def main():
     response_from_search()
