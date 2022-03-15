@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+import time
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -49,7 +50,7 @@ def get_row_index_from_search():
     
     ind_list = []
     # Loop through search results
-    for result in search_results:
+    for result in search_criteria:
         index = 0
         # Loop through the names column to find matches
         for name in casefold_names_converted:
@@ -68,7 +69,7 @@ def response_from_search():
         print(f"Sorry, we didn't find any results!\nHint: Try entering text.")
         get_search_query()
     else:
-        print(f"We found {len(index_query_list)} results.\n")
+        print(f"{len(index_query_list)} results found in {round(end - start, 1)} seconds.\n")
     # return len(index_query_list)
 
 
@@ -91,7 +92,9 @@ def show_search_results():
 
 names_col = get_names()
 casefold_names_converted = get_casefold_food_names()
-search_results = get_search_query()
+search_criteria = get_search_query()
+start = time.time()
 index_query_list = get_row_index_from_search()
+end = time.time()
 response_from_search()
 show_search_results()
