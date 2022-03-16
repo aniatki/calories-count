@@ -4,13 +4,15 @@
 
 FoodWise allows you to look up any detail about your food simply by entering its name in the command line. Our wide range of food entries will bring up any suggestions or keywords related to that food that you might want to have a look at or any substitute suggestions.
 
+[foodWise Heroku Link](foodwise.png)
+
 ## Existing Features
 
 * Search for foods by entering a food name in the input field in the command line to view its nutritional values.
 
 There's a huge range of entries in a spreadsheet for foods (over 8000 entries), by having details about a specific food in a row of data. The name in the first column, then numbers about energy, protein, fat and fiber in their respective columns. The input string typed by the user triggers a function that iterates through all the rows of data to find potential matches, and when it does it displays those entries in the console as found in the image below.
 
-![Snapshot of foodWise CLI]('https://i.ibb.co/BfjtFj4/foodwise.png')
+![Snapshot of foodWise CLI](https://i.ibb.co/BfjtFj4/foodwise.png)
 
 ## Features to Add
 
