@@ -4,7 +4,7 @@
 
 FoodWise allows you to look up any detail about your food simply by entering its name in the command line. Our wide range of food entries will bring up any suggestions or keywords related to that food that you might want to have a look at or any substitute suggestions.
 
-[foodWise Heroku Link](foodwise.png)
+[foodWise Heroku Link](https://food-wise-cal.herokuapp.com/)
 
 ## Existing Features
 
