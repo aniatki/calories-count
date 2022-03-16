@@ -8,6 +8,10 @@ FoodWise allows you to look up any detail about your food simply by entering its
 
 * Search for foods by entering a food name in the input field in the command line to view its nutritional values.
 
+There's a huge range of entries in a spreadsheet for foods (over 8000 entries), by having details about a specific food in a row of data. The name in the first column, then numbers about energy, protein, fat and fiber in their respective columns. The input string typed by the user triggers a function that iterates through all the rows of data to find potential matches, and when it does it displays those entries in the console as found in the image below.
+
+![Snapshot of foodWise CLI]('https://i.ibb.co/BfjtFj4/foodwise.png')
+
 ## Features to Add
 
 * Ability to enter a row of data for a specific food that isn't already in the database.

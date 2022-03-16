@@ -6,8 +6,8 @@ from termcolor import colored
 
 welcome_str_start = "Welcome to"
 foodWise = f"{colored('food', 'green')}{colored('Wise', 'cyan')}."
-welcome_str_end = f("Search for any food's nutritional values by \
-                    typing its name below.\nPlease wait...\n")
+welcome_str_end = f"Search for any food's nutritional values by \
+typing its name below.\nPlease wait...\n"
 
 print(welcome_str_start, foodWise, welcome_str_end)
 
@@ -61,8 +61,7 @@ casefold_names_converted = get_casefold_food_names()
 def get_search_query():
     query = input("What would you like to search for? \
         \nExample: bread\n").casefold()
-    result = list(filter((
-        lambda x: x.startswith(query), casefold_names_converted)))
+    result = list(filter(lambda x: x.startswith(query), casefold_names_converted))
     print(f"Processing {query}...")
     return result
 
@@ -119,8 +118,9 @@ def show_search_results():
         fat = row[3]
         carbs = row[4]
         fiber = row[-1]
-        print(f"{name} contains {energy}kCal, {protein}g of protein,\
-                {fat}g of fat, and {fiber}g of fiber.\n")
+        s_results = f"{name} contains {energy}kCal, {protein}g of protein,\
+{fat}g of fat, and {fiber}g of fiber.\n"
+        print(s_results)
 
 
 def main():
