@@ -1,6 +1,5 @@
 import gspread
 from google.oauth2.service_account import Credentials
-import time
 from termcolor import colored
 
 
@@ -25,10 +24,6 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('nuitrition_sheet').worksheet('ABBREV')
 sheet_values = SHEET.get_all_values()
 all_values_list = sheet_values
-
-
-global start
-global end
 
 
 def get_names():
@@ -68,6 +63,16 @@ def get_search_query():
 s_query = get_search_query()
 
 
+def validate(s_query):
+    if s_query == [] or type(s_query) == "float" or type(s_query) == "int":
+        return False
+    else:
+        return True
+
+
+condition = validate(s_query)
+
+
 def get_row_index_from_search():
 
     """Finds the indices of all rows that contain the search query"""
@@ -87,23 +92,19 @@ def get_row_index_from_search():
 
 
 search_ind = get_row_index_from_search()
-
-start = time.time()
+length = len(search_ind)
 
 
 def response_from_search():
 
     """Shows how many results are found, if any"""
-    while len(search_ind) < 1:
-        print(f"Sorry, we didn't find any results!\nHint: Try entering text.")
+
+    if length <= 0:
+        print(f"Sorry, we didn't find any results for {s_query}!\nHint: Try entering text.")
         get_search_query()
-    if len(search_ind) > 0:
-        end = time.time()
-        duration = round(end - start, 1)
-        if duration == 0:
-            print(f"{len(search_ind)} results found.\n")
-        else:
-            print(f"{len(search_ind)} results found in {duration} seconds.\n")
+    else:
+        print(f"{length} results found.\n")
+        show_search_results()
 
 
 def show_search_results():
@@ -124,6 +125,12 @@ def show_search_results():
 
 
 def main():
+    if condition == False:
+        get_search_query()
+        validate(s_query)
+        get_row_index_from_search()
+        response_from_search()
+        show_search_results()
     response_from_search()
     show_search_results()
 main()
